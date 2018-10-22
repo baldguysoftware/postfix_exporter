@@ -9,4 +9,4 @@ before_install:
     - go get github.com/tcnksm/ghr
 
 after_install:
-    - ghr  --username therealbill --token $GITHUB_TOKEN --replace $(cat .version) zealot
+    - ghr  --username baldguysoftware --token $GITHUB_TOKEN --replace $(cat .version) zealot
