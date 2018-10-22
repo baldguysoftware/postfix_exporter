@@ -32,6 +32,8 @@ type Exporter struct {
 	deferredQ prometheus.Gauge
 	holdQ     prometheus.Gauge
 	bounceQ   prometheus.Gauge
+	connects  prometheus.Gauge
+	delays    prometheus.Histogram
 }
 
 // NewPostfixExporter returns an initialized Exporter.
@@ -72,6 +74,16 @@ func NewPostfixExporter() *Exporter {
 			Name:      "bounce_queue_length",
 			Help:      "length of bounce mail queue",
 		}),
+		connects: prometheus.NewGauge(prometheus.GaugeOpts{
+			Namespace: namespace,
+			Name:      "smtpd_connections_initiated",
+			Help:      "Number of new smtpd connections",
+		}),
+		delays: prometheus.NewHistogram(prometheus.HistogramOpts{
+			Namespace: namespace,
+			Name:      "message_delays",
+			Help:      "Time the message spent on the server until removed",
+		}),
 	}
 }
 
@@ -85,6 +97,8 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	e.deferredQ.Describe(ch)
 	e.holdQ.Describe(ch)
 	e.bounceQ.Describe(ch)
+	e.connects.Describe(ch)
+	e.delays.Describe(ch)
 }
 
 func countDir(tgt string) (float64, error) {
@@ -140,6 +154,8 @@ func (e *Exporter) scrape(ch chan<- prometheus.Metric) error {
 	total_length += bounce_queue
 
 	e.totalQ.Set(total_length)
+
+	//readLogFile(e)
 
 	return nil
 }

@@ -1,0 +1,12 @@
+os: osx
+
+language: go
+
+go: 
+    - 1.7
+
+before_install:
+    - go get github.com/tcnksm/ghr
+
+after_install:
+    - ghr  --username therealbill --token $GITHUB_TOKEN --replace $(cat .version) zealot
