@@ -5,7 +5,7 @@ release: postfix_exporter
 	ghr  --username baldguysoftware --token ${GITHUB_TOKEN} --replace ${VERSION} postfix_exporter
 
 
-pf2s3: 
+postfix_exporter: 
 	go get -t ./...
 	go build 
 
