@@ -3,7 +3,7 @@ os: osx
 language: go
 
 go: 
-    - 1.7
+    - "1.10"
 
 before_install:
     - go get github.com/tcnksm/ghr
